@@ -11,6 +11,11 @@ import Logo from "./Logo";
 import Link from "next/link";
 import { buttonVariants } from "./ui/button";
 import { usePathname } from "next/navigation";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+} from "./ui/sidebar";
 
 const routes = [
   {
@@ -35,7 +40,7 @@ const routes = [
   },
 ];
 
-export function DesktopSidebar() {
+export function AppSidebar() {
   const pathName = usePathname();
   const activeRoute =
     routes.find(
@@ -43,28 +48,27 @@ export function DesktopSidebar() {
     ) || routes[0];
 
   return (
-    <div className="hidden relative md:block min-w-[280px] max-w-[280px] h-screen overflow-hidden w-full bg-primary/5 dark:bg-secondary/30 dark:text-foreground text-muted-foreground border-r-2 border-separate">
-      <div className="flex items-center justify-center gap-2 border-b border-separate p-4">
+    <Sidebar>
+      <SidebarHeader className="p-4 space-y-2">
         <Logo />
-      </div>
-      <div className="p-2">Credits</div>
-      <div className="flex flex-col p-2">
-        {routes.map((route) => (
-          <Link
-            key={route.href}
-            href={route.href}
-            className={buttonVariants({
-              variant:
-                activeRoute.href === route.href
-                  ? "sidebarActiveItem"
-                  : "sidebarItem",
-            })}
-          >
-            <route.icon size={20} />
-            <span>{route.label}</span>
-          </Link>
-        ))}
-      </div>
-    </div>
+        <div>TODO: Credits</div>
+      </SidebarHeader>
+      <SidebarContent className="p-4">
+        <div className="flex flex-col gap-1">
+          {routes.map((route) => (
+            <Link
+              key={route.href}
+              href={route.href}
+              className={`justify-start ${buttonVariants({
+                variant: activeRoute.href === route.href ? "default" : "ghost",
+              })}`}
+            >
+              <route.icon size={16} />
+              <span>{route.label}</span>
+            </Link>
+          ))}
+        </div>
+      </SidebarContent>
+    </Sidebar>
   );
 }
