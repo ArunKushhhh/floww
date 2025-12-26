@@ -11,11 +11,7 @@ import Logo from "./Logo";
 import Link from "next/link";
 import { buttonVariants } from "./ui/button";
 import { usePathname } from "next/navigation";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-} from "./ui/sidebar";
+import { Sidebar, SidebarContent, SidebarHeader } from "./ui/sidebar";
 
 const routes = [
   {
@@ -61,6 +57,7 @@ export function AppSidebar() {
               href={route.href}
               className={`justify-start ${buttonVariants({
                 variant: activeRoute.href === route.href ? "default" : "ghost",
+                size: "sm",
               })}`}
             >
               <route.icon size={16} />
