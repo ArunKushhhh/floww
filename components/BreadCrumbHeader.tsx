@@ -7,6 +7,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbSeparator,
 } from "./ui/breadcrumb";
 
 function BreadCrumbHeader() {
@@ -19,10 +20,11 @@ function BreadCrumbHeader() {
           {paths.map((path, index) => (
             <React.Fragment key={index}>
               <BreadcrumbItem>
-                <BreadcrumbLink href={path} className="text-xs">
+                <BreadcrumbLink href={path} className="text-xs capitalize">
                   {path === "" ? "Home" : path}
                 </BreadcrumbLink>
               </BreadcrumbItem>
+              {paths.length - 1 !== index && <BreadcrumbSeparator />}
             </React.Fragment>
           ))}
         </BreadcrumbList>

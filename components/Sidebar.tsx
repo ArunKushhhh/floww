@@ -20,17 +20,17 @@ const routes = [
     icon: HomeIcon,
   },
   {
-    href: "workflows",
+    href: "/workflows",
     label: "Workflows",
     icon: Layers2Icon,
   },
   {
-    href: "credentials",
+    href: "/credentials",
     label: "Credentials",
     icon: ShieldCheckIcon,
   },
   {
-    href: "billing",
+    href: "/billing",
     label: "Billing",
     icon: CoinsIcon,
   },
@@ -40,7 +40,9 @@ export function AppSidebar() {
   const pathName = usePathname();
   const activeRoute =
     routes.find(
-      (route) => route.href.length > 0 && pathName.includes(route.href)
+      (route) =>
+        (route.href !== "/" && pathName.startsWith(route.href)) ||
+        pathName === route.href
     ) || routes[0];
 
   return (
