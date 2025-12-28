@@ -5,7 +5,6 @@ import { auth } from "@clerk/nextjs/server";
 import z from "zod";
 import { prisma } from "@/lib/prisma";
 import { WorkflowStatus } from "@/types/workflow";
-import { redirect } from "next/navigation";
 import { AppNode } from "@/types/appNode";
 import { Edge } from "@xyflow/react";
 import { CreateFlowNode } from "@/lib/workflow/CreateFlowNode";
@@ -48,5 +47,5 @@ export async function CreateWorkflow(
     throw new Error("Failed to create workflow");
   }
 
-  redirect(`/workflow/editor/${result.id}`);
+  return result;
 }
