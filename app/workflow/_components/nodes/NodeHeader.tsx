@@ -2,12 +2,22 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CreateFlowNode } from "@/lib/workflow/CreateFlowNode";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
+import { AppNode } from "@/types/appNode";
 import { TaskType } from "@/types/task";
-import { CoinsIcon, GripVerticalIcon } from "lucide-react";
+import { useReactFlow } from "@xyflow/react";
+import { CoinsIcon, Copy, GripVerticalIcon, Trash } from "lucide-react";
 
-export function NodeHeader({ taskType }: { taskType: TaskType }) {
+export function NodeHeader({
+  taskType,
+  nodeId,
+}: {
+  taskType: TaskType;
+  nodeId: string;
+}) {
   const task = TaskRegistry[taskType];
+  const { deleteElements, getNode, addNodes } = useReactFlow();
   return (
     <div className="flex items-center gap-2 p-2">
       <task.icon size={16} />
@@ -19,8 +29,39 @@ export function NodeHeader({ taskType }: { taskType: TaskType }) {
           {task.isEntryPoint && <Badge>Entry Point</Badge>}
           <Badge>
             <CoinsIcon size={16} />
-            TODO
+            {task.credits}
           </Badge>
+          {!task.isEntryPoint && (
+            <>
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                onClick={() =>
+                  deleteElements({
+                    nodes: [{ id: nodeId }],
+                  })
+                }
+              >
+                <Trash />
+              </Button>
+              <Button
+                variant={"ghost"}
+                size={"icon"}
+                onClick={() => {
+                  const node = getNode(nodeId) as AppNode;
+                  const newX = node.position.x + 60;
+                  const newY = node.position.y + 60;
+                  const newNode = CreateFlowNode(node.data.type, {
+                    x: newX,
+                    y: newY,
+                  });
+                  addNodes([newNode]);
+                }}
+              >
+                <Copy />
+              </Button>
+            </>
+          )}
           <Button
             variant={"ghost"}
             size={"icon"}

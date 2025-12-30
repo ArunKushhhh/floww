@@ -52,6 +52,7 @@ export function CreateWorkflowDialog({
   const { mutate, isPending } = useMutation({
     mutationFn: CreateWorkflow,
     onSuccess: (result) => {
+      // console.log("Resulted workflow: ", result);
       toast.success("Workflow created", { id: "create-workflow" });
       router.push(`/workflow/editor/${result.id}`);
     },
