@@ -12,7 +12,7 @@ import { TaskType } from "@/types/task";
 
 export default function TaskMenu() {
   return (
-    <aside className="w-[280px] min-w-[280px] max-w-[280px] border-r-2 border-separate h-full p-2 px-4 overflow-auto">
+    <aside className="w-[320px] min-w-[320px] max-w-[320px] border-r-2 border-separate h-full p-2 px-4 overflow-auto">
       <Accordion
         type="multiple"
         className="w-full"

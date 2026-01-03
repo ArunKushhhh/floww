@@ -10,8 +10,9 @@ import { ExecuteBtn } from "./ExecuteBtn";
 interface Props {
   title: string;
   workflowId: string;
+  hideButtons?: boolean;
 }
-function Topbar({ title, workflowId }: Props) {
+function Topbar({ title, workflowId, hideButtons = false }: Props) {
   const router = useRouter();
   return (
     <header className="flex p-2 border-b-2 border-separate justify-between items-center w-full sticky h-[60px]  top-0 bg-background z-10">
@@ -26,8 +27,12 @@ function Topbar({ title, workflowId }: Props) {
         </div>
       </div>
       <div className="flex gap-1 flex-1 justify-end">
-        <ExecuteBtn workflowId={workflowId} />
-        <SaveBtn workflowId={workflowId} />
+        {!hideButtons && (
+          <>
+            <ExecuteBtn workflowId={workflowId} />
+            <SaveBtn workflowId={workflowId} />
+          </>
+        )}
       </div>
     </header>
   );
