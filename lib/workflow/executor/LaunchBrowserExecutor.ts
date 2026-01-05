@@ -17,8 +17,8 @@ export async function LaunchBrowserExecutor(
     await page.goto(websiteUrl);
     environment.setPage(page); // we are setting both browser and page as once everything's is done, we want to close the browser
     return true;
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+    environment.log.error(error.message);
     return false;
   }
 }
