@@ -12,6 +12,7 @@ import Link from "next/link";
 import { buttonVariants } from "./ui/button";
 import { usePathname } from "next/navigation";
 import { Sidebar, SidebarContent, SidebarHeader } from "./ui/sidebar";
+import { UserAvailableCreditsBadge } from "./UserAvailableCreditsBadge";
 
 const routes = [
   {
@@ -49,7 +50,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="p-4 space-y-2">
         <Logo />
-        <div>TODO: Credits</div>
+        <UserAvailableCreditsBadge />
       </SidebarHeader>
       <SidebarContent className="p-4">
         <div className="flex flex-col gap-1">
