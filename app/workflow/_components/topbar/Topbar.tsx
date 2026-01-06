@@ -6,6 +6,7 @@ import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { SaveBtn } from "./SaveBtn";
 import { ExecuteBtn } from "./ExecuteBtn";
+import { NavigationTabs } from "./NavigationTabs";
 
 interface Props {
   title: string;
@@ -26,6 +27,7 @@ function Topbar({ title, workflowId, hideButtons = false }: Props) {
           <p className="font-medium text-ellipsis truncate">{title}</p>
         </div>
       </div>
+      <NavigationTabs workflowId={workflowId} />
       <div className="flex gap-1 flex-1 justify-end">
         {!hideButtons && (
           <>

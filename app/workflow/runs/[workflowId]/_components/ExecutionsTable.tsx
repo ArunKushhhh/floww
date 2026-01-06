@@ -1,0 +1,113 @@
+"use client";
+
+import { getWorkflowExecutions } from "@/actions/workflows/getWorkflowExecutions";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { DatesToDurationString } from "@/lib/helper/dates";
+import { Badge } from "@/components/ui/badge";
+import { ExecutionStatusIndicator } from "./ExecutionStatusIndicator";
+import { WorkflowExecutionStatus } from "@/types/workflow";
+import { Coins } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import { useRouter } from "next/navigation";
+
+type InitialDataType = Awaited<ReturnType<typeof getWorkflowExecutions>>;
+
+export function ExecutionsTable({
+  workflowId,
+  initialData,
+}: {
+  workflowId: string;
+  initialData: InitialDataType;
+}) {
+  const router = useRouter();
+  const query = useQuery({
+    queryKey: ["executions", workflowId],
+    initialData,
+    queryFn: () => getWorkflowExecutions(workflowId),
+    refetchInterval: 5000,
+  });
+  return (
+    <div className="border rounded-lg overflow-auto shadow-md">
+      <Table className="h-full">
+        <TableHeader className="bg-accent">
+          <TableRow>
+            <TableHead className="text-muted-foreground">Id</TableHead>
+            <TableHead className="text-muted-foreground">Status</TableHead>
+            <TableHead className="text-muted-foreground">Consumed</TableHead>
+            <TableHead className="text-right text-muted-foreground">
+              Started At (desc)
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody className="gap-2 h-full overflow-auto">
+          {query.data?.map((execution) => {
+            const duration = DatesToDurationString(
+              execution.completedAt,
+              execution.startedAt
+            );
+
+            const formattedStartedAt =
+              execution.startedAt &&
+              formatDistanceToNow(execution.startedAt, {
+                addSuffix: true,
+              });
+            return (
+              <TableRow
+                key={execution.id}
+                className="cursor-pointer"
+                onClick={() => {router.push(`/workflow/runs/${workflowId}/${execution.id}`)}}
+              >
+                <TableCell>
+                  <div className="flex flex-col">
+                    <span className="font-medium">{execution.id}</span>
+                    <div className="text-muted-foreground text-xs flex items-center gap-2">
+                      <span>Triggered via</span>
+                      <Badge variant="outline">{execution.trigger}</Badge>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <div className="flex items-center gap-2">
+                      <ExecutionStatusIndicator
+                        status={execution.status as WorkflowExecutionStatus}
+                      />
+                      <span className="font-medium">{execution.status}</span>
+                    </div>
+                    <div className="text-xs text-muted-foreground mx-4">
+                      {duration}
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <div className="flex items-center gap-2">
+                      <Coins className="size-4 text-primary" />
+                      <span className="font-medium">
+                        {execution.creditsConsumed}
+                      </span>
+                    </div>
+                    <div className="text-xs text-muted-foreground mx-4">
+                      Credits
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell className="text-right text-muted-foreground">
+                  {formattedStartedAt}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}
