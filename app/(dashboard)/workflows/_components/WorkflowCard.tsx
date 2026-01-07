@@ -26,10 +26,11 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import { DeleteWorkflowDialog } from "./DeleteWorkflowDialog";
+import { RunBtn } from "./RunBtn";
 
 const statusColors = {
   [WorkflowStatus.DRAFT]: "bg-yellow-400 text-yellow-700",
-  [WorkflowStatus.PUBLISHED]: "bg-primary",
+  [WorkflowStatus.PUBLISHED]: "bg-primary text-primary-foreground",
 };
 
 const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
@@ -69,17 +70,21 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
           </div>
         </div>
         <div className="flex items-center space-x-2">
+          {!isDraft && <RunBtn workflowId={workflow.id} />}
           <Link
             href={`/workflow/editor/${workflow.id}`}
             className={cn(
-              buttonVariants({ variant: "secondary", size: "sm" }),
+              buttonVariants({ variant: "outline", size: "sm" }),
               "flex items-center"
             )}
           >
             <ShuffleIcon className="size-4" />
             <p>Edit</p>
           </Link>
-          <WorkflowActions workflowName={workflow.name} workflowId={workflow.id} />
+          <WorkflowActions
+            workflowName={workflow.name}
+            workflowId={workflow.id}
+          />
         </div>
       </CardContent>
     </Card>
@@ -106,7 +111,7 @@ function WorkflowActions({
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant={"secondary"} size={"sm"} className="px-2">
+          <Button variant={"outline"} size={"sm"} className="px-2">
             <TooltipWrapper content="More actions">
               <div className="w-full h-full flex justify-center items-center">
                 <MoreVerticalIcon size={18} />

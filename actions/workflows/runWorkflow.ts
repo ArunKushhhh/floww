@@ -7,6 +7,7 @@ import {
   workflowExecutionPlan,
   WorkflowExecutionStatus,
   WorkflowExecutionTrigger,
+  WorkflowStatus,
 } from "@/types/workflow";
 import { FlowToExecutionPlan } from "@/lib/workflow/ExecutionPlan";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
@@ -39,21 +40,32 @@ export async function runWorkflow(form: {
   }
 
   let executionPlan: workflowExecutionPlan;
-  if (!flowDefinition) {
-    throw new Error("Flow definition is not defined");
-  }
+  let workflowDefintion = flowDefinition;
 
-  const flow = JSON.parse(flowDefinition);
-  const result = FlowToExecutionPlan(flow.nodes, flow.edges);
-  if (result.error) {
-    throw new Error("Flow definition not valid.");
-  }
+  if (workflow.status === WorkflowStatus.PUBLISHED) {
+    if (!workflow.executionPlan) {
+      throw new Error("Execution plan not found in published workflow.");
+    }
+    executionPlan = JSON.parse(workflow.executionPlan);
+    workflowDefintion = workflow.definition;
+  } else {
+    //workflow is a draft
+    if (!flowDefinition) {
+      throw new Error("Flow definition is not defined");
+    }
 
-  if (!result.executionPlan) {
-    throw new Error("Execution plan not generated.");
-  }
+    const flow = JSON.parse(flowDefinition);
+    const result = FlowToExecutionPlan(flow.nodes, flow.edges);
+    if (result.error) {
+      throw new Error("Flow definition not valid.");
+    }
 
-  executionPlan = result.executionPlan;
+    if (!result.executionPlan) {
+      throw new Error("Execution plan not generated.");
+    }
+
+    executionPlan = result.executionPlan;
+  }
 
   // console.log("Execution plan: ", executionPlan);
   const execution = await prisma.workflowExecution.create({
@@ -63,7 +75,7 @@ export async function runWorkflow(form: {
       status: WorkflowExecutionStatus.PENDING,
       startedAt: new Date(),
       trigger: WorkflowExecutionTrigger.MANUAL,
-      definition: flowDefinition,
+      definition: workflowDefintion,
       phases: {
         create: executionPlan.flatMap((phase) => {
           return phase.nodes.flatMap((node) => {
