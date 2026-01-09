@@ -17,8 +17,11 @@ import { WorkflowStatus } from "@/types/workflow";
 import { Workflow } from "@prisma/client";
 import {
   ArrowUpRightIcon,
+  CoinsIcon,
+  CornerDownRightIcon,
   FileText,
   MoreVerticalIcon,
+  MoveRightIcon,
   Play,
   ShuffleIcon,
   Trash2Icon,
@@ -27,6 +30,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { DeleteWorkflowDialog } from "./DeleteWorkflowDialog";
 import { RunBtn } from "./RunBtn";
+import { SchedulerDialog } from "./SchedulerDialog";
 
 const statusColors = {
   [WorkflowStatus.DRAFT]: "bg-yellow-400 text-yellow-700",
@@ -67,6 +71,12 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
                 <Badge className="bg-yellow-200 text-yellow-700">Draft</Badge>
               )}
             </h3>
+            <ScheduleSection
+              isDraft={isDraft}
+              creditsCost={workflow.creditsCost}
+              workflowId={workflow.id}
+              cron={workflow.cron}
+            />
           </div>
         </div>
         <div className="flex items-center space-x-2">
@@ -132,5 +142,39 @@ function WorkflowActions({
         </DropdownMenuContent>
       </DropdownMenu>
     </>
+  );
+}
+
+function ScheduleSection({
+  isDraft,
+  creditsCost,
+  workflowId,
+  cron,
+}: {
+  isDraft: boolean;
+  creditsCost: number;
+  workflowId: string;
+  cron: string | null;
+}) {
+  if (isDraft) {
+    return null;
+  }
+  return (
+    <div className="flex items-center gap-2">
+      <CornerDownRightIcon className="size-4 text-muted-foreground" />
+      <SchedulerDialog workflowId={workflowId} cron={cron} />
+      <MoveRightIcon className="size-4 text-muted-foreground" />
+      <TooltipWrapper content="Credits consumption for full run">
+        <div className="flex items-center gap-3">
+          <Badge
+            variant={"outline"}
+            className="space-x-2 text-muted-foreground rounded-sm"
+          >
+            <CoinsIcon className="size-4" />
+            <span className="text-sm">{creditsCost}</span>
+          </Badge>
+        </div>
+      </TooltipWrapper>
+    </div>
   );
 }
