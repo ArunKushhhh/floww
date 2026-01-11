@@ -13,6 +13,7 @@ interface Props {
 }
 
 export function TooltipWrapper({ children, side, content }: Props) {
+  if (!content) return children;
   return (
     <TooltipProvider delayDuration={0}>
       <Tooltip>

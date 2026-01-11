@@ -5,6 +5,7 @@ import z from "zod";
 import { auth } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 import { WorkflowStatus } from "@/types/workflow";
+import { revalidatePath } from "next/cache";
 
 export async function duplicateWorkflow(
   form: z.infer<typeof duplicateWorkflowSchema>
@@ -44,5 +45,5 @@ export async function duplicateWorkflow(
     throw new Error("Failed to duplicate workflow");
   }
 
-  return result;
+  revalidatePath("/workflows");
 }

@@ -33,6 +33,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Workflow } from "@prisma/client";
 import { duplicateWorkflow } from "@/actions/workflows/duplicateWorkflow";
+import { cn } from "@/lib/utils";
 
 export function DuplicateWorkflowDialog({
   workflowId,
@@ -50,10 +51,10 @@ export function DuplicateWorkflowDialog({
 
   const { mutate, isPending } = useMutation({
     mutationFn: duplicateWorkflow,
-    onSuccess: (result: Workflow) => {
+    onSuccess: () => {
       // console.log("Resulted workflow: ", result);
       toast.success("Workflow duplicated", { id: "duplicate-workflow" });
-      router.push(`/workflow/editor/${result.id}`);
+      setOpen((prev) => !prev);
     },
     onError: () => {
       toast.error("Failed to duplicate workflow", { id: "duplicate-workflow" });
@@ -76,8 +77,14 @@ export function DuplicateWorkflowDialog({
       }}
     >
       <DialogTrigger asChild>
-        <Button variant={"ghost"}>
-          <Copy className="text-muted-foreground size-3" />
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          className={cn(
+            "ml-2 transition-opacity duration-200 opacity-0 group-hover/card:opacity-100"
+          )}
+        >
+          <Copy className="text-muted-foreground size-4 cursor-pointer" />
         </Button>
       </DialogTrigger>
       <DialogContent>

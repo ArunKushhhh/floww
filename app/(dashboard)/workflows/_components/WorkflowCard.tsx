@@ -49,7 +49,7 @@ const statusColors = {
 const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
   const isDraft = workflow.status === WorkflowStatus.DRAFT;
   return (
-    <Card className="py-0 overflow-hidden gap-0!">
+    <Card className="py-0 overflow-hidden gap-0! group/card">
       <CardContent className="flex items-center justify-between py-6">
         <div className="flex items-center justify-end gap-2">
           <div
@@ -66,16 +66,18 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
           </div>
           <div>
             <h3 className="flex items-center">
-              <Link
-                href={`/workflow/editor/${workflow.id}`}
-                className={cn(
-                  buttonVariants({ variant: "link" }),
-                  "flex items-center text-muted-foreground"
-                )}
-              >
-                {workflow.name}
-                <ArrowUpRightIcon className="size-4" />
-              </Link>
+              <TooltipWrapper content={workflow.description}>
+                <Link
+                  href={`/workflow/editor/${workflow.id}`}
+                  className={cn(
+                    buttonVariants({ variant: "link" }),
+                    "flex items-center text-muted-foreground"
+                  )}
+                >
+                  {workflow.name}
+                  <ArrowUpRightIcon className="size-4" />
+                </Link>
+              </TooltipWrapper>
               {isDraft && (
                 <Badge className="bg-yellow-200 text-yellow-700">Draft</Badge>
               )}
