@@ -7,3 +7,7 @@ export const createWorkflowSchema = z.object({
     .max(50, "Name must be at most 50 characters long"),
   description: z.string().max(100).optional(),
 });
+
+export const duplicateWorkflowSchema = createWorkflowSchema.extend({
+  workflowId: z.string(),
+})

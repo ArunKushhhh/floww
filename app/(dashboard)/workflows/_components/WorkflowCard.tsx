@@ -39,6 +39,7 @@ import {
 } from "@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator";
 import { format, formatDistanceToNow } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
+import { DuplicateWorkflowDialog } from "./DuplicateWorkflowDialog";
 
 const statusColors = {
   [WorkflowStatus.DRAFT]: "bg-yellow-400 text-yellow-700",
@@ -78,6 +79,8 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
               {isDraft && (
                 <Badge className="bg-yellow-200 text-yellow-700">Draft</Badge>
               )}
+
+              <DuplicateWorkflowDialog workflowId={workflow.id} />
             </h3>
             <ScheduleSection
               isDraft={isDraft}
