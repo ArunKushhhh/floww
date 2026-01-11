@@ -13,7 +13,7 @@ export async function LaunchBrowserExecutor(
       headless: true, // for testing, we need to see if the browser is launched; made ot true for production as we the browser to be launched in the background
     });
     environment.log.info("Browser launched successfully");
-    
+
     environment.setBrowser(browser);
     const page = await browser.newPage();
     await page.goto(websiteUrl);
