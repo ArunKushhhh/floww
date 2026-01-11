@@ -5,6 +5,7 @@ export enum TaskType {
   FILL_INPUT = "FILL_INPUT",
   CLICK_ELEMENT = "CLICK_ELEMENT",
   WAIT_FOR_ELEMENT = "WAIT_FOR_ELEMENT",
+  DELIVER_VIA_WEBHOOK = "DELIVER_VIA_WEBHOOK",
 }
 
 export enum TaskParamType {
@@ -19,5 +20,6 @@ export interface TaskParam {
   helperText?: string;
   required?: boolean;
   hideHandle?: boolean;
+  value?: string;
   [key: string]: any;
 }
