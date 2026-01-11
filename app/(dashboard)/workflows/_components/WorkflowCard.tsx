@@ -13,10 +13,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { WorkflowStatus } from "@/types/workflow";
+import { WorkflowExecutionStatus, WorkflowStatus } from "@/types/workflow";
 import { Workflow } from "@prisma/client";
 import {
   ArrowUpRightIcon,
+  ChevronRightIcon,
+  ClockIcon,
   CoinsIcon,
   CornerDownRightIcon,
   FileText,
@@ -31,6 +33,12 @@ import { useState } from "react";
 import { DeleteWorkflowDialog } from "./DeleteWorkflowDialog";
 import { RunBtn } from "./RunBtn";
 import { SchedulerDialog } from "./SchedulerDialog";
+import {
+  ExecutionStatusIndicator,
+  ExecutionStatusLabel,
+} from "@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator";
+import { format, formatDistanceToNow } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 
 const statusColors = {
   [WorkflowStatus.DRAFT]: "bg-yellow-400 text-yellow-700",
@@ -40,8 +48,8 @@ const statusColors = {
 const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
   const isDraft = workflow.status === WorkflowStatus.DRAFT;
   return (
-    <Card>
-      <CardContent className="flex items-center justify-between">
+    <Card className="py-0 overflow-hidden gap-0!">
+      <CardContent className="flex items-center justify-between py-6">
         <div className="flex items-center justify-end gap-2">
           <div
             className={cn(
@@ -97,6 +105,7 @@ const WorkflowCard = ({ workflow }: { workflow: Workflow }) => {
           />
         </div>
       </CardContent>
+      <LastRunDetails workflow={workflow} />
     </Card>
   );
 };
@@ -162,7 +171,11 @@ function ScheduleSection({
   return (
     <div className="flex items-center gap-2">
       <CornerDownRightIcon className="size-4 text-muted-foreground" />
-    <SchedulerDialog workflowId={workflowId} cron={cron} key={`${cron}-${workflowId}`} />
+      <SchedulerDialog
+        workflowId={workflowId}
+        cron={cron}
+        key={`${cron}-${workflowId}`}
+      />
       <MoveRightIcon className="size-4 text-muted-foreground" />
       <TooltipWrapper content="Credits consumption for full run">
         <div className="flex items-center gap-3">
@@ -175,6 +188,52 @@ function ScheduleSection({
           </Badge>
         </div>
       </TooltipWrapper>
+    </div>
+  );
+}
+
+function LastRunDetails({ workflow }: { workflow: Workflow }) {
+  const isDraft = workflow.status === WorkflowStatus.DRAFT;
+  if (isDraft) {
+    return null;
+  }
+
+  const { lastRunAt, lastRunStatus, lastRunId, nextRunAt } = workflow;
+  const formattedStartedAt =
+    lastRunAt && formatDistanceToNow(lastRunAt, { addSuffix: true });
+
+  const nextSchedule = nextRunAt && format(nextRunAt, "yyyy-MM-dd HH:mm");
+  const nextScheduleUTC =
+    nextRunAt && formatInTimeZone(nextRunAt, "UTC", "HH:mm");
+  return (
+    <div className="bg-primary/5 px-4 py-2 flex justify-between items-center text-muted-foreground">
+      <div className="flex items-center text-xs gap-2 font-medium">
+        {lastRunAt && (
+          <Link
+            href={`/workflow/runs/${workflow.id}/${lastRunId}`}
+            className="flex items-center gap-2 text-xs group font-medium"
+          >
+            <span>Last run: </span>
+            <ExecutionStatusIndicator
+              status={lastRunStatus as WorkflowExecutionStatus}
+            />
+            <ExecutionStatusLabel
+              status={lastRunStatus as WorkflowExecutionStatus}
+            />
+            <span>{formattedStartedAt}</span>
+            <ChevronRightIcon className="size-3 -translate-x-[2px] group-hover:translate-x-0 transition" />
+          </Link>
+        )}
+        {!lastRunAt && <span>No runs yet</span>}
+      </div>
+      {nextRunAt && (
+        <div className="flex items-center gap-2 text-xs font-medium">
+          <ClockIcon className="size-3 stroke-2" />
+          <span>Next run at: </span>
+          <span>{nextSchedule}</span>
+          <span>({nextScheduleUTC} UTC)</span>
+        </div>
+      )}
     </div>
   );
 }
