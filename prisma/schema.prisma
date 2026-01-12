@@ -89,3 +89,13 @@ model userBalance {
   userId String @id
   credits Int @default(0)
 }
+
+model Credentials {
+  id String @id @default(cuid())
+  userId String
+  name String
+  value String
+
+  createdAt DateTime @default(now())
+  @@unique([userId,name]) // prevent the same user from having two credentials with the same name
+}
