@@ -47,6 +47,7 @@ import { cn } from "@/lib/utils";
 import { LogLevel } from "@/types/log";
 import { PhaseStatusBadge } from "./PhaseStatusBadge";
 import { ReactCountUpWrapper } from "@/components/ReactCountUpWrapper";
+import { Textarea } from "@/components/ui/textarea";
 
 type ExecutionData = Awaited<ReturnType<typeof getWorkflowExecutionWithPhases>>;
 function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
@@ -257,6 +258,10 @@ function ParameterViewer({
   paramsJSON?: string | null;
 }) {
   const params = paramsJSON ? JSON.parse(paramsJSON) : undefined;
+    let Component: any = Input;
+  if (params?.variant === "textarea") {
+    Component = Textarea;
+  }
   return (
     <Card>
       <CardHeader>
@@ -277,7 +282,7 @@ function ParameterViewer({
                 <p className="font-medium text-muted-foreground flex-1 basis-1/3">
                   {key}
                 </p>
-                <Input
+                <Component
                   readOnly
                   value={value as string}
                   className="text-xs basis-2/3"
