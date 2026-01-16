@@ -6,13 +6,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
 import { TaskType } from "@/types/task";
+import { CoinsIcon } from "lucide-react";
 
 export default function TaskMenu() {
   return (
-    <aside className="w-[320px] min-w-[320px] max-w-[320px] border-r-2 border-separate h-full p-2 px-4 overflow-auto">
+    <aside className="w-[340px] min-w-[340px] max-w-[340px] border-r-2 border-separate h-full p-2 px-4 overflow-auto">
       <Accordion
         type="multiple"
         className="w-full"
@@ -27,8 +29,10 @@ export default function TaskMenu() {
         <AccordionItem value="interactions">
           <AccordionTrigger>User Interactions</AccordionTrigger>
           <AccordionContent className="flex flex-col gap-1">
+            <TaskMenuBtn taskType={TaskType.NAVIGATE_URL} />
             <TaskMenuBtn taskType={TaskType.FILL_INPUT} />
             <TaskMenuBtn taskType={TaskType.CLICK_ELEMENT} />
+            <TaskMenuBtn taskType={TaskType.SCROLL_TO_ELEMENT} />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="extraction">
@@ -43,6 +47,7 @@ export default function TaskMenu() {
           <AccordionTrigger>Data Storage</AccordionTrigger>
           <AccordionContent className="flex flex-col gap-1">
             <TaskMenuBtn taskType={TaskType.READ_PROPERTY_FROM_JSON} />
+            <TaskMenuBtn taskType={TaskType.ADD_PROPERTY_TO_JSON} />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="timing">
@@ -80,6 +85,10 @@ export function TaskMenuBtn({ taskType }: { taskType: TaskType }) {
         <task.icon size={20} />
         {task.label}
       </div>
+      <Badge className="flex items-center gap-2" variant={"outline"}>
+        <CoinsIcon size={14} />
+        {task.credits}
+      </Badge>
     </Button>
   );
 }
