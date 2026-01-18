@@ -114,7 +114,7 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.439 0 0);
   .react-flow__controls-button {
-    @apply !bg-accent;
+    @apply bg-accent!;
   }
 }
 

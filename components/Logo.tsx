@@ -15,13 +15,11 @@ function Logo({
       href={"/"}
       className={cn("text-lg font-extrabold flex items-center gap-2", fontSize)}
     >
-      <div className="rounded-md bg-linear-to-br from-blue-500 to-emerald-600 p-2">
+      <div className="rounded-md bg-primary p-2">
         <SquareDashedMousePointer size={iconSize} color="white" />
       </div>
       <div>
-        <span className="bg-linear-to-br from-blue-500 to-emerald-600 bg-clip-text text-transparent">
-          Floww
-        </span>
+        <span className="text-secondary-foreground">Floww</span>
       </div>
     </Link>
   );
