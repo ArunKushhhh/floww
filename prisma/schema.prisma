@@ -99,3 +99,13 @@ model Credentials {
   createdAt DateTime @default(now())
   @@unique([userId,name]) // prevent the same user from having two credentials with the same name
 }
+
+model UserPurchase {
+  id String @id @default(cuid())
+  userId String
+  stripeId String
+  description String
+  amount Int
+  currency String
+  date DateTime @default(now())
+}
