@@ -36,7 +36,7 @@ export async function getCreditsUsageInPeriod(period: Period) {
     end: dateRange.endDate,
   })
     .map((date) => format(date, dateFormat))
-    .reduce((acc, date) => {
+    .reduce((acc: Stats, date: string) => {
       acc[date] = {
         success: 0,
         failed: 0,

@@ -46,12 +46,12 @@ export async function getStatsCardValues(period: Period) {
   };
 
   stats.creditsConsumed = executions.reduce(
-    (acc: number, execution) => acc + execution.creditsConsumed,
+    (acc: number, execution: (typeof executions)[number]) => acc + execution.creditsConsumed,
     0
   );
 
   stats.phaseExecutions = executions.reduce(
-    (acc: number, execution) => acc + execution.phases.length,
+    (acc: number, execution: (typeof executions)[number]) => acc + execution.phases.length,
     0
   );
 
