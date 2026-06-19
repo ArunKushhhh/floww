@@ -42,7 +42,7 @@ export async function getCreditsUsageInPeriod(period: Period) {
         failed: 0,
       };
       return acc;
-    }, {} as any);
+    }, {} as Stats);
 
   executionPhases.forEach((phase: (typeof executionPhases)[number]) => {
     const date = format(phase.startedAt!, dateFormat);

@@ -39,7 +39,7 @@ export async function getWorkflowExecutionStats(period: Period) {
         failed: 0,
       };
       return acc;
-    }, {} as any);
+    }, {} as Stats);
 
   executions.forEach((execution) => {
     const date = format(execution.startedAt!, dateFormat);
