@@ -111,11 +111,11 @@ async function initialiseWorkflowExecution(
   });
 }
 
-async function initialisePhasesStatuses(execution: any) {
+async function initialisePhasesStatuses(execution: { phases: ExecutionPhase[] }) {
   await prisma.executionPhase.updateMany({
     where: {
       id: {
-        in: execution.phases.map((phase: any) => phase.id),
+        in: execution.phases.map((phase: ExecutionPhase) => phase.id),
       },
     },
     data: {
@@ -155,7 +155,7 @@ async function finaliseWorkflowExecution(
         lastRunStatus: finalStatus,
       },
     })
-    .catch((error) => {
+    .catch((_error: unknown) => {
       // do nothing: this would mean we have triggered other phases to update the workflow while an execution was running
     });
 }
@@ -334,7 +334,7 @@ async function cleanupEnvironment(environment: Environment) {
   if (environment.browser) {
     await environment.browser
       .close()
-      .catch((error) =>
+      .catch((error: unknown) =>
         console.error("Error closing browser. Reason: ", error)
       );
   }

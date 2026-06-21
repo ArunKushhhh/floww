@@ -100,7 +100,7 @@ async function TransactionHistoryCard() {
             No transactions yet
           </div>
         )}
-        {purchases.map((purchase) => (
+        {purchases.map((purchase: (typeof purchases)[number]) => (
           <div
             key={purchase.id}
             className="flex items-center justify-between py-3 border-b last:border-b-0"

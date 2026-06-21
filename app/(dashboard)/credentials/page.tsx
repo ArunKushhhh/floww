@@ -3,7 +3,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LockKeyholeIcon, ShieldIcon, ShieldOffIcon } from "lucide-react";
-import { Creepster } from "next/font/google";
 import { Suspense } from "react";
 import { CreateCredentialDialog } from "./_components/CreateCredentialDialog";
 import { formatDistanceToNow } from "date-fns";
@@ -66,7 +65,7 @@ async function UserCredentials() {
 
   return (
     <div className="flex gap-2 flex-wrap">
-      {credentials.map((credential) => {
+      {credentials.map((credential: (typeof credentials)[number]) => {
         const createdAt = formatDistanceToNow(credential.createdAt, {
           addSuffix: true,
         });

@@ -79,7 +79,7 @@ async function UserWorkflows() {
     );
   }
   return <div className="flex flex-col gap-4">
-    {workflows.map((workflow) => (
+    {workflows.map((workflow: (typeof workflows)[number]) => (
       <WorkflowCard key={workflow.id} workflow={workflow} />
     ))}
 
